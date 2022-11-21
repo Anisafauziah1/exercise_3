@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,47 @@ namespace exercise_3
         {
             LAST = null;
         }
+        public void addNote() // add a note in the list
+        {
+            int rollNo;
+            string nm;
+            Console.Write("\nEnter the roll number of the student: ");
+            rollNo = Convert.ToInt32(Console.ReadLine());
+            Console.Write("\nEnter the roll name of the student: ");
+            nm = Console.ReadLine();
+            Node newnode = new Node();
+            newnode.rollNumber = rollNo;
+            newnode.name = nm;
+            // if the node to be inserted is the first node
+            if (LAST == null || rollNo <= LAST.rollNumber)
+            {
+                if ((LAST != null) && (rollNo == LAST.rollNumber))
+                {
+                    Console.WriteLine();
+                    return;
+                }
+                Node previous, current;
+                previous = LAST;
+                current = LAST;
+
+                while ((current != null) && (rollNo >= current.rollNumber))
+                {
+                    if (rollNo == current.rollNumber)
+                    {
+                        Console.WriteLine();
+                        return;
+                    }
+
+                    previous.next = current;
+                    previous.next = newnode;
+                }
+                newnode.next = current;
+                previous.next = newnode;
+
+            }
+
+
+        }
         public bool Search(int rollNo, ref Node previous, ref Node current)
         /*Searches for the specified node*/
         {
@@ -34,6 +76,17 @@ namespace exercise_3
                 return true;
             else
                 return (false); /*returns false if the node is not found*/
+        }
+        public bool delNode(int rollNo)
+        {
+            Node previous, current;
+            previous = current = null;
+            if (Search(rollNo, ref previous, ref current) == false)
+                return false;
+            previous.next = current.next;
+            if (current == LAST)
+                LAST = LAST.next;
+            return true;
         }
         public bool listEmpty()
         {
@@ -126,6 +179,10 @@ namespace exercise_3
                                 break;
                             }
                     }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
                 }
             }
         }
